@@ -1,10 +1,10 @@
 import 'package:todo_redux/todoitem.dart';
 
 class AppState {
-  final List<TodoItem> totoList;
+  final List<TodoItem> todoList;
   final ListState listState;
 
-  AppState(this.totoList, this.listState);
+  AppState(this.todoList, this.listState);
 
   factory AppState.initial() =>
       AppState(List.unmodifiable([]), ListState.listOnly);

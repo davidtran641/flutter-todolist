@@ -16,6 +16,4 @@ class RemoveItemAction {
   RemoveItemAction(this.item);
 }
 
-class SaveListAction {
-
-}
+class SaveListAction {}

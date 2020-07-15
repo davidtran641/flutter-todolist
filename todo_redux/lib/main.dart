@@ -11,10 +11,12 @@ void main() {
   runApp(TodoListApp());
 }
 
-
 class TodoListApp extends StatelessWidget {
-  final Store<AppState> store = Store<AppState>(appReducer,
-      initialState: AppState.initial(), middleware: createStoreMiddleWare());
+  final Store<AppState> store = Store<AppState>(
+      appReducer,
+      initialState: AppState.initial(),
+      middleware: createStoreMiddleWare()
+  );
 
   @override
   Widget build(BuildContext context) {
