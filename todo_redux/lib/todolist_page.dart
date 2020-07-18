@@ -14,21 +14,22 @@ class TodoListPage extends StatelessWidget {
     return StoreConnector<AppState, ViewModel>(
       converter: (Store<AppState> store) => ViewModel.make(store),
       builder: (BuildContext context, ViewModel viewModel) {
-        print('rebuild todolist page');
+        print('rebuild todo list page');
         return Scaffold(
             appBar: AppBar(
               title: Text(viewModel.pageTitle),
             ),
-            body: _createListView(viewModel),
+            body: _createListView(context, viewModel),
             floatingActionButton: _createFloatingButton(viewModel));
       },
     );
   }
 
-  ListView _createListView(ViewModel viewModel) {
+  ListView _createListView(BuildContext context, ViewModel viewModel) {
     return ListView(
-        children:
-        viewModel.items.map((item) => _createItemWidget(item)).toList());
+        children: viewModel.items
+            .map((item) => _createItemWidget(context, item))
+            .toList());
   }
 
   FloatingActionButton _createFloatingButton(ViewModel viewModel) =>
@@ -38,16 +39,16 @@ class TodoListPage extends StatelessWidget {
         child: Icon(viewModel.newItemIcon),
       );
 
-  Widget _createItemWidget(ItemViewModel item) {
+  Widget _createItemWidget(BuildContext context, ItemViewModel item) {
     print('Rebuild item widget');
     if (item is EmptyItemViewModel) {
-      return _createEmptyItemWidget(item);
+      return _createEmptyItemWidget(context, item);
     } else {
-      return _createTodoItemWidget(item);
+      return _createTodoItemWidget(context, item);
     }
   }
 
-  Widget _createEmptyItemWidget(EmptyItemViewModel item) {
+  Widget _createEmptyItemWidget(BuildContext context, EmptyItemViewModel item) {
     return Padding(
         padding: EdgeInsets.all(8),
         child: Column(
@@ -61,12 +62,12 @@ class TodoListPage extends StatelessWidget {
         ));
   }
 
-  Widget _createTodoItemWidget(TodoItemViewModel item) {
+  Widget _createTodoItemWidget(BuildContext context, TodoItemViewModel item) {
     return Padding(
         padding: EdgeInsets.all(8),
         child: Row(
           children: [
-            Text(item.title),
+            Text(item.title, style: Theme.of(context).textTheme.subtitle1),
             FlatButton(
                 onPressed: item.onDeleteItem,
                 child: Icon(
