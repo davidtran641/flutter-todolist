@@ -4,10 +4,27 @@ import 'package:redux/redux.dart';
 import 'package:todo_redux/state.dart';
 import 'package:todo_redux/view_model.dart';
 
-class TodoListPage extends StatelessWidget {
+class TodoListPage extends StatefulWidget {
   final String title;
 
   TodoListPage(this.title);
+
+  @override
+  _TodoListPageState createState() => _TodoListPageState();
+}
+
+class _TodoListPageState extends State<TodoListPage>
+    with TickerProviderStateMixin {
+  AnimationController animationController;
+
+  CurvedAnimation curve;
+
+  void initState() {
+    animationController = AnimationController(
+        duration: const Duration(milliseconds: 300), vsync: this);
+    curve =
+        CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +51,10 @@ class TodoListPage extends StatelessWidget {
 
   FloatingActionButton _createFloatingButton(ViewModel viewModel) =>
       FloatingActionButton(
-        onPressed: viewModel.onNewItem,
+        onPressed: () {
+          viewModel.onNewItem.call();
+          animationController.forward();
+        },
         tooltip: viewModel.newItemToolTip,
         child: Icon(viewModel.newItemIcon),
       );
@@ -53,10 +73,13 @@ class TodoListPage extends StatelessWidget {
         padding: EdgeInsets.all(8),
         child: Column(
           children: [
-            TextField(
-              onSubmitted: item.onCreateItem,
-              autofocus: true,
-              decoration: InputDecoration(hintText: item.createItemToolTip),
+            FadeTransition(
+              opacity: curve,
+              child: TextField(
+                onSubmitted: item.onCreateItem,
+                autofocus: true,
+                decoration: InputDecoration(hintText: item.createItemToolTip),
+              ),
             )
           ],
         ));
@@ -77,5 +100,11 @@ class TodoListPage extends StatelessWidget {
           ],
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         ));
+
+  }
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
   }
 }
