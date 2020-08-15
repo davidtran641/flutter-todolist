@@ -22,12 +22,22 @@ class _TodoListPageState extends State<TodoListPage>
 
   CurvedAnimation curve;
 
+  @override
   void initState() {
+    super.initState();
+
     animationController = AnimationController(
         duration: const Duration(milliseconds: 300), vsync: this);
     scrollController = ScrollController();
     curve =
         CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -146,11 +156,5 @@ class _TodoListPageState extends State<TodoListPage>
           ],
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         ));
-  }
-
-  @override
-  void dispose() {
-    animationController.dispose();
-    super.dispose();
   }
 }
