@@ -2,7 +2,7 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
 Future<bool> isPresent(SerializableFinder finder, FlutterDriver driver,
-    {Duration timeout = const Duration(seconds: 1)}) async {
+    {Duration timeout = const Duration(milliseconds: 100)}) async {
   try {
     await driver.waitFor(finder, timeout: timeout);
     return true;
@@ -48,7 +48,7 @@ void main() {
       // Remove item
       await driver.tap(deleteButton);
 
-      expect(await isPresent(todoTitle, driver, timeout: Duration(milliseconds: 100)), false);
+      expect(await isPresent(todoTitle, driver), false);
     });
 
     test('Add todo 2', () async {
