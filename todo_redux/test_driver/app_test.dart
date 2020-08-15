@@ -62,6 +62,19 @@ void main() {
       expect(await isPresent(find.text('Non existent item'), driver), false);
     });
 
+    test('Add long list', () async {
+      for (int i = 0; i < 15; i++) {
+        await addItem('Item $i');
+      }
 
+      final todoList = find.byValueKey('todo_list');
+      final firstItemFinder = find.text('Item 0');
+      await driver.scrollUntilVisible(
+        todoList,
+        firstItemFinder,
+        dyScroll: 300.0,
+      );
+      expect(await isPresent(firstItemFinder, driver), true);
+    });
   });
 }

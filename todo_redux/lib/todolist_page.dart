@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -16,12 +18,14 @@ class TodoListPage extends StatefulWidget {
 class _TodoListPageState extends State<TodoListPage>
     with TickerProviderStateMixin {
   AnimationController animationController;
+  ScrollController scrollController;
 
   CurvedAnimation curve;
 
   void initState() {
     animationController = AnimationController(
         duration: const Duration(milliseconds: 300), vsync: this);
+    scrollController = ScrollController();
     curve =
         CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
   }
@@ -43,22 +47,37 @@ class _TodoListPageState extends State<TodoListPage>
   }
 
   ListView _createListView(BuildContext context, ViewModel viewModel) {
-    return ListView(
-        children: viewModel.items
-            .map((item) => _createItemWidget(context, item))
-            .toList());
+    return ListView.builder(
+      key: Key('todo_list'),
+      padding: EdgeInsets.only(bottom: 100),
+      controller: scrollController,
+      itemCount: viewModel.items.length,
+      itemBuilder: (context, index) =>
+          _createItemWidget(context, viewModel.items[index]),
+    );
   }
 
   FloatingActionButton _createFloatingButton(ViewModel viewModel) =>
       FloatingActionButton(
         key: Key('floating_button'),
         onPressed: () {
-          viewModel.onNewItem.call();
-          animationController.forward();
+          _handleAddButtonClicked(viewModel);
         },
         tooltip: viewModel.newItemToolTip,
         child: Icon(viewModel.newItemIcon),
       );
+
+  void _handleAddButtonClicked(ViewModel viewModel) {
+    viewModel.onNewItem.call();
+    animationController.forward();
+
+    // Scroll up to show text field
+    Timer(Duration(milliseconds: 100), () {
+      scrollController.animateTo(scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 100),
+          curve: Curves.fastLinearToSlowEaseIn);
+    });
+  }
 
   Widget _createItemWidget(BuildContext context, ItemViewModel item) {
     print('Rebuild item widget');
@@ -87,12 +106,13 @@ class _TodoListPageState extends State<TodoListPage>
                       controller: textFieldController,
                       onSubmitted: item.onCreateItem,
                       autofocus: true,
-                      decoration: InputDecoration(hintText: item.createItemToolTip),
+                      decoration:
+                          InputDecoration(hintText: item.createItemToolTip),
                     ),
                   ),
                   FlatButton(
                       key: Key('save_button'),
-                      onPressed: (){
+                      onPressed: () {
                         item.onCreateItem(textFieldController.text);
                       },
                       child: Icon(
