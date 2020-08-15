@@ -51,6 +51,7 @@ class _TodoListPageState extends State<TodoListPage>
 
   FloatingActionButton _createFloatingButton(ViewModel viewModel) =>
       FloatingActionButton(
+        key: Key('floating_button'),
         onPressed: () {
           viewModel.onNewItem.call();
           animationController.forward();
@@ -69,16 +70,36 @@ class _TodoListPageState extends State<TodoListPage>
   }
 
   Widget _createEmptyItemWidget(BuildContext context, EmptyItemViewModel item) {
+    final textFieldController = TextEditingController();
+
     return Padding(
         padding: EdgeInsets.all(8),
         child: Column(
           children: [
             FadeTransition(
               opacity: curve,
-              child: TextField(
-                onSubmitted: item.onCreateItem,
-                autofocus: true,
-                decoration: InputDecoration(hintText: item.createItemToolTip),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                      key: Key('todo_text_field'),
+                      controller: textFieldController,
+                      onSubmitted: item.onCreateItem,
+                      autofocus: true,
+                      decoration: InputDecoration(hintText: item.createItemToolTip),
+                    ),
+                  ),
+                  FlatButton(
+                      key: Key('save_button'),
+                      onPressed: (){
+                        item.onCreateItem(textFieldController.text);
+                      },
+                      child: Icon(
+                        Icons.save,
+                        semanticLabel: 'Save',
+                      ))
+                ],
               ),
             )
           ],
@@ -90,8 +111,13 @@ class _TodoListPageState extends State<TodoListPage>
         padding: EdgeInsets.all(8),
         child: Row(
           children: [
-            Text(item.title, style: Theme.of(context).textTheme.subtitle1),
+            Text(
+              item.title,
+              key: Key('todo_text'),
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
             FlatButton(
+                key: Key('delete_button'),
                 onPressed: item.onDeleteItem,
                 child: Icon(
                   item.deleteItemIcon,
@@ -100,8 +126,8 @@ class _TodoListPageState extends State<TodoListPage>
           ],
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         ));
-
   }
+
   @override
   void dispose() {
     animationController.dispose();
