@@ -10,7 +10,9 @@ void main() {
 
     expect(find.byTooltip('Add new to-do item'), findsOneWidget);
 
-    await tester.tap(find.byIcon(Icons.add));
+    await tester.tap(find.byTooltip('Add new to-do item'));
+    tester.binding.scheduleWarmUpFrame();
+
     await tester.pump();
 
     expect(find.byType(TextField), findsOneWidget);

@@ -1,4 +1,4 @@
-import 'package:todo_redux/todoitem.dart';
+import 'package:todo_redux/model/todoitem.dart';
 
 class AppState {
   final List<TodoItem> todoList;

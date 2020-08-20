@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:redux/redux.dart';
-import 'package:todo_redux/state.dart';
+import 'package:todo_redux/model/state.dart';
 
-import 'action.dart';
+import 'redux/action.dart';
 
 
 List<Middleware<AppState>> createStoreMiddleWare() {

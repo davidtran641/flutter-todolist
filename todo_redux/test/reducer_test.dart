@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:todo_redux/action.dart';
-import 'package:todo_redux/reducer.dart';
-import 'package:todo_redux/state.dart';
-import 'package:todo_redux/todoitem.dart';
+import 'package:todo_redux/redux/action.dart';
+import 'package:todo_redux/redux/reducer.dart';
+import 'package:todo_redux/model/state.dart';
+import 'package:todo_redux/model/todoitem.dart';
 
 void main() {
   group('Reducer', () {

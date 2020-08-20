@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'package:todo_redux/reducer.dart';
-import 'package:todo_redux/state.dart';
+import 'package:todo_redux/redux/reducer.dart';
+import 'package:todo_redux/model/state.dart';
 import 'package:todo_redux/todolist_page.dart';
 
 import 'middleware.dart';

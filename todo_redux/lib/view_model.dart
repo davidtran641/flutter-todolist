@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
-import 'package:todo_redux/state.dart';
-import 'package:todo_redux/todoitem.dart';
+import 'package:todo_redux/model/state.dart';
+import 'package:todo_redux/model/todoitem.dart';
 
-import 'action.dart';
+import 'redux/action.dart';
 
 class ViewModel {
   final String pageTitle;
@@ -12,10 +12,20 @@ class ViewModel {
   final String newItemToolTip;
   final IconData newItemIcon;
 
-  ViewModel(this.pageTitle, this.items, this.onNewItem, this.newItemToolTip,
-      this.newItemIcon);
+  ViewModel({
+    this.pageTitle,
+    this.items,
+    this.onNewItem,
+    this.newItemToolTip,
+    this.newItemIcon,
+  });
 
   factory ViewModel.make(Store<AppState> store) {
+    _onNewItem() {
+      print("On new item");
+      store.dispatch(DisplayListWithNewItemAction());
+    }
+
     List<TodoItemViewModel> todoItems = store.state.todoList
         .map((item) => TodoItemViewModel.make(store, item))
         .toList();
@@ -25,10 +35,13 @@ class ViewModel {
       print('Create new item to add');
       items.add(EmptyItemViewModel.make(store));
     }
-    return ViewModel('Todo', items, () {
-      print("On new item");
-      store.dispatch(DisplayListWithNewItemAction());
-    }, 'Add new to-do item', Icons.add);
+
+    return ViewModel(
+        pageTitle: 'Todo',
+        items: items,
+        onNewItem: _onNewItem,
+        newItemToolTip: 'Add new to-do item',
+        newItemIcon: Icons.add);
   }
 }
 
@@ -41,14 +54,26 @@ class TodoItemViewModel extends ItemViewModel {
   final String deleteItemTooltip;
   final IconData deleteItemIcon;
 
-  TodoItemViewModel(this.title, this.onDeleteItem, this.deleteItemTooltip,
-      this.deleteItemIcon);
+  TodoItemViewModel({
+    this.title,
+    this.onDeleteItem,
+    this.deleteItemTooltip,
+    this.deleteItemIcon,
+  });
 
-  factory TodoItemViewModel.make(Store<AppState> store, TodoItem item) =>
-      TodoItemViewModel(item.title, () {
-        store.dispatch(RemoveItemAction(item));
-        store.dispatch(SaveListAction());
-      }, 'Delete', Icons.delete);
+  factory TodoItemViewModel.make(Store<AppState> store, TodoItem item) {
+    _onDeleteItem() {
+      store.dispatch(RemoveItemAction(item));
+      store.dispatch(SaveListAction());
+    }
+
+    return TodoItemViewModel(
+      title: item.title,
+      onDeleteItem: _onDeleteItem,
+      deleteItemTooltip: 'Delete',
+      deleteItemIcon: Icons.delete,
+    );
+  }
 }
 
 @immutable
@@ -57,12 +82,23 @@ class EmptyItemViewModel extends ItemViewModel {
   final Function(String) onCreateItem;
   final String createItemToolTip;
 
-  EmptyItemViewModel(this.hint, this.onCreateItem, this.createItemToolTip);
+  EmptyItemViewModel({
+    this.hint,
+    this.onCreateItem,
+    this.createItemToolTip,
+  });
 
-  factory EmptyItemViewModel.make(Store<AppState> store) =>
-      EmptyItemViewModel('Add new task here', (String title) {
-        store.dispatch(DisplayListOnlyAction());
-        store.dispatch(AddItemAction(TodoItem(title)));
-        store.dispatch(SaveListAction());
-      }, 'Add');
+  factory EmptyItemViewModel.make(Store<AppState> store) {
+    _onCreateItem(String title) {
+      store.dispatch(DisplayListOnlyAction());
+      store.dispatch(AddItemAction(TodoItem(title)));
+      store.dispatch(SaveListAction());
+    }
+
+    return EmptyItemViewModel(
+      hint: 'Add new task here',
+      onCreateItem: _onCreateItem,
+      createItemToolTip: 'Add',
+    );
+  }
 }

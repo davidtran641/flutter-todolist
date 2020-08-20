@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:redux/redux.dart';
-import 'package:todo_redux/action.dart';
-import 'package:todo_redux/state.dart';
-import 'package:todo_redux/todoitem.dart';
+import 'package:todo_redux/redux/action.dart';
+import 'package:todo_redux/model/state.dart';
+import 'package:todo_redux/model/todoitem.dart';
 import 'package:todo_redux/view_model.dart';
 
 class MockStore extends Mock implements Store<AppState> {}
