@@ -17,3 +17,10 @@ class RemoveItemAction {
 }
 
 class SaveListAction {}
+
+class GetListAction {}
+
+class LoadedTodoListAction {
+  final List<TodoItem> todoList;
+  LoadedTodoListAction(this.todoList);
+}

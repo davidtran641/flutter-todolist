@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_redux_dev_tools/flutter_redux_dev_tools.dart';
 import 'package:redux/redux.dart';
 import 'package:todo_redux/model/state.dart';
 import 'package:todo_redux/view_model.dart';
@@ -52,7 +53,13 @@ class _TodoListPageState extends State<TodoListPage>
               title: Text(viewModel.pageTitle),
             ),
             body: _createListView(context, viewModel),
-            floatingActionButton: _createFloatingButton(viewModel));
+            floatingActionButton: _createFloatingButton(viewModel),
+            endDrawer: Container(
+              width: 300,
+              color: Colors.white.withAlpha(100),
+              child: ReduxDevTools<AppState>(viewModel.store),
+            ),
+        );
       },
     );
   }

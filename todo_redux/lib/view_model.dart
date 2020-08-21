@@ -11,6 +11,7 @@ class ViewModel {
   final Function onNewItem;
   final String newItemToolTip;
   final IconData newItemIcon;
+  final Store<AppState> store;
 
   ViewModel({
     this.pageTitle,
@@ -18,6 +19,7 @@ class ViewModel {
     this.onNewItem,
     this.newItemToolTip,
     this.newItemIcon,
+    this.store,
   });
 
   factory ViewModel.make(Store<AppState> store) {
@@ -41,7 +43,9 @@ class ViewModel {
         items: items,
         onNewItem: _onNewItem,
         newItemToolTip: 'Add new to-do item',
-        newItemIcon: Icons.add);
+        newItemIcon: Icons.add,
+        store: store,
+    );
   }
 }
 
