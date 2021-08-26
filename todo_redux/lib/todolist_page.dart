@@ -17,8 +17,7 @@ class TodoListPage extends StatefulWidget {
   _TodoListPageState createState() => _TodoListPageState();
 }
 
-class _TodoListPageState extends State<TodoListPage>
-    with TickerProviderStateMixin {
+class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMixin {
   AnimationController animationController;
   ScrollController scrollController;
 
@@ -28,11 +27,9 @@ class _TodoListPageState extends State<TodoListPage>
   void initState() {
     super.initState();
 
-    animationController = AnimationController(
-        duration: const Duration(milliseconds: 300), vsync: this);
+    // animationController = AnimationController(duration: const Duration(milliseconds: 300), vsync: this);
     scrollController = ScrollController();
-    curve =
-        CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
+    curve = CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
   }
 
   @override
@@ -49,16 +46,16 @@ class _TodoListPageState extends State<TodoListPage>
       builder: (BuildContext context, ViewModel viewModel) {
         print('rebuild todo list page');
         return Scaffold(
-            appBar: AppBar(
-              title: Text(viewModel.pageTitle),
-            ),
-            body: _createListView(context, viewModel),
-            floatingActionButton: _createFloatingButton(viewModel),
-            endDrawer: Container(
-              width: 300,
-              color: Colors.white.withAlpha(100),
-              child: ReduxDevTools<AppState>(viewModel.store),
-            ),
+          appBar: AppBar(
+            title: Text(viewModel.pageTitle),
+          ),
+          body: _createListView(context, viewModel),
+          floatingActionButton: _createFloatingButton(viewModel),
+          endDrawer: Container(
+            width: 300,
+            color: Colors.white.withAlpha(100),
+            child: ReduxDevTools<AppState>(viewModel.store),
+          ),
         );
       },
     );
@@ -70,13 +67,11 @@ class _TodoListPageState extends State<TodoListPage>
       padding: EdgeInsets.only(bottom: 100),
       controller: scrollController,
       itemCount: viewModel.items.length,
-      itemBuilder: (context, index) =>
-          _createItemWidget(context, viewModel.items[index]),
+      itemBuilder: (context, index) => _createItemWidget(context, viewModel.items[index]),
     );
   }
 
-  FloatingActionButton _createFloatingButton(ViewModel viewModel) =>
-      FloatingActionButton(
+  FloatingActionButton _createFloatingButton(ViewModel viewModel) => FloatingActionButton(
         key: Key('floating_button'),
         onPressed: () {
           _handleAddButtonClicked(viewModel);
@@ -91,11 +86,8 @@ class _TodoListPageState extends State<TodoListPage>
 
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
       await scrollController.animateTo(scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 100),
-          curve: Curves.fastLinearToSlowEaseIn);
+          duration: Duration(milliseconds: 100), curve: Curves.fastLinearToSlowEaseIn);
     });
-
-
   }
 
   Widget _createItemWidget(BuildContext context, ItemViewModel item) {
@@ -132,8 +124,7 @@ class _AddItemWidgetState extends State<AddItemWidget> {
         controller: textFieldController,
         onSubmitted: widget.viewModel.onCreateItem,
         autofocus: true,
-        decoration:
-            InputDecoration(hintText: widget.viewModel.createItemToolTip),
+        decoration: InputDecoration(hintText: widget.viewModel.createItemToolTip),
       ),
       trailing: IconButton(
         key: Key('save_button'),
